@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { ChevronDown, Sparkles, Globe } from 'lucide-react';
 import DiagnosticModal from './DiagnosticModal';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onOpenSignup?: (plan: any) => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onOpenSignup }) => {
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
 
   const scrollToPlans = () => {
     const element = document.getElementById('plans');
     if (element) {
-      const headerOffset = 80; // ヘッダーの高さ分
+      const headerOffset = 26; // ヘッダーとセクション名の隙間を1/3に調整
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
       
@@ -102,6 +106,7 @@ const Hero: React.FC = () => {
       <DiagnosticModal 
         isOpen={isDiagnosticOpen} 
         onClose={() => setIsDiagnosticOpen(false)} 
+        onOpenSignup={onOpenSignup}
       />
     </section>
   );

@@ -171,10 +171,10 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
   if (!isOpen || !selectedPlan) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-midnight-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700 shadow-2xl">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-midnight-800 rounded-xl sm:rounded-2xl max-w-4xl w-full h-[100vh] sm:h-auto sm:max-h-[90vh] overflow-y-auto border border-gray-700 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-700">
           <div>
             <h2 className="text-xl font-serif font-bold text-midnight-50">
               {selectedPlan.name} プランのお申し込み
@@ -189,8 +189,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
         </div>
 
         <div className="flex">
-          {/* Sidebar - Steps */}
-          <div className="w-64 p-6 border-r border-gray-700">
+          {/* Sidebar - Steps (Hidden on mobile) */}
+          <div className="hidden lg:block w-64 p-6 border-r border-gray-700">
             <div className="space-y-4">
               {steps.map((step, index) => (
                 <div
@@ -225,9 +225,26 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-4 sm:p-6">
             {!isCompleted ? (
               <>
+                {/* Mobile Progress Bar */}
+                <div className="lg:hidden mb-6">
+                  <div className="flex justify-between text-sm text-midnight-100 mb-2">
+                    <span>進行状況</span>
+                    <span>{currentStep + 1} / {steps.length}</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
+                    <div
+                      className="bg-gold-500 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h4 className="text-lg font-semibold text-gold-500">{steps[currentStep].title}</h4>
+                  </div>
+                </div>
+                
                 {/* Step Content */}
                 <div className="mb-8">
                   {currentStep === 0 && (
@@ -247,7 +264,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
                               type="email"
                               value={formData.email}
                               onChange={(e) => handleInputChange('email', e.target.value)}
-                              className={`w-full pl-12 pr-4 py-3 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 ${
+                              className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 text-base ${
                                 errors.email ? 'border-red-500' : 'border-gray-600 focus:border-gold-500'
                               }`}
                               placeholder="example@email.com"
@@ -266,7 +283,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
                               type="password"
                               value={formData.password}
                               onChange={(e) => handleInputChange('password', e.target.value)}
-                              className={`w-full pl-12 pr-4 py-3 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 ${
+                              className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 text-base ${
                                 errors.password ? 'border-red-500' : 'border-gray-600 focus:border-gold-500'
                               }`}
                               placeholder="8文字以上"
@@ -285,7 +302,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
                               type="password"
                               value={formData.confirmPassword}
                               onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                              className={`w-full pl-12 pr-4 py-3 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 ${
+                              className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 text-base ${
                                 errors.confirmPassword ? 'border-red-500' : 'border-gray-600 focus:border-gold-500'
                               }`}
                               placeholder="パスワードを再入力"
@@ -423,7 +440,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, selectedPlan
                               type="tel"
                               value={formData.phone}
                               onChange={(e) => handleInputChange('phone', e.target.value)}
-                              className={`w-full pl-12 pr-4 py-3 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 ${
+                              className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-midnight-900 border rounded-lg text-midnight-50 placeholder-midnight-100 text-base ${
                                 errors.phone ? 'border-red-500' : 'border-gray-600 focus:border-gold-500'
                               }`}
                               placeholder="090-1234-5678"

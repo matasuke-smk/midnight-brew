@@ -4,6 +4,7 @@ import { X, Coffee, CheckCircle } from 'lucide-react';
 interface DiagnosticModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenSignup?: (plan: any) => void;
 }
 
 interface DiagnosticAnswers {
@@ -21,7 +22,7 @@ interface Recommendation {
   description: string;
 }
 
-const DiagnosticModal: React.FC<DiagnosticModalProps> = ({ isOpen, onClose }) => {
+const DiagnosticModal: React.FC<DiagnosticModalProps> = ({ isOpen, onClose, onOpenSignup }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswers>({
     taste: '',
@@ -228,20 +229,37 @@ const DiagnosticModal: React.FC<DiagnosticModalProps> = ({ isOpen, onClose }) =>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={() => {
-                    handleClose();
-                    setTimeout(() => {
-                      const element = document.getElementById('plans');
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition = element.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: 'smooth'
-                        });
-                      }
-                    }, 100);
+                    if (onOpenSignup && recommendation) {
+                      const planData = {
+                        id: recommendation.plan,
+                        name: recommendation.planName,
+                        weight: recommendation.plan === 'discovery' ? '100g×2種' : 
+                               recommendation.plan === 'enthusiast' ? '200g×2種' : '200g×3種',
+                        varieties: recommendation.plan === 'discovery' ? '2種' : 
+                                  recommendation.plan === 'enthusiast' ? '2種' : '3種',
+                        originalPrice: parseInt(recommendation.originalPrice.replace(/[¥,]/g, '')),
+                        discountedPrice: parseInt(recommendation.price.replace(/[¥,]/g, '')),
+                        targetUser: recommendation.plan === 'discovery' ? '2-3杯/週の方に' : 
+                                   recommendation.plan === 'enthusiast' ? '毎日1杯の方に' : '毎日2杯以上の方に'
+                      };
+                      handleClose();
+                      onOpenSignup(planData);
+                    } else {
+                      handleClose();
+                      setTimeout(() => {
+                        const element = document.getElementById('plans');
+                        if (element) {
+                          const headerOffset = 26;
+                          const elementPosition = element.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                          
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }, 100);
+                    }
                   }}
                   className="flex-1 bg-gold-500 text-midnight-900 px-6 py-3 rounded-lg font-semibold hover:bg-gold-400 transition-colors duration-200"
                 >

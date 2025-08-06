@@ -15,7 +15,11 @@ interface Plan {
   targetUser: string;
 }
 
-const Plans: React.FC = () => {
+interface PlansProps {
+  onOpenSignup?: (plan: any) => void;
+}
+
+const Plans: React.FC<PlansProps> = ({ onOpenSignup }) => {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
@@ -81,8 +85,12 @@ const Plans: React.FC = () => {
   ];
 
   const handlePlanSelect = (plan: Plan) => {
-    setSelectedPlan(plan);
-    setIsSignupModalOpen(true);
+    if (onOpenSignup) {
+      onOpenSignup(plan);
+    } else {
+      setSelectedPlan(plan);
+      setIsSignupModalOpen(true);
+    }
   };
 
   return (

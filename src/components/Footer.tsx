@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const headerOffset = 80;
+      const headerOffset = 26; // ヘッダーとセクション名の隙間を1/3に調整
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
       
