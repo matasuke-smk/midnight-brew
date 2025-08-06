@@ -34,7 +34,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenSignup }) => {
           }}
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/75" />
         {/* Gradient overlay for premium feel */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-midnight-900/80" />
       </div>
@@ -53,11 +53,18 @@ const Hero: React.FC<HeroProps> = ({ onOpenSignup }) => {
             <span className="text-gold-500">体験する</span>
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-2xl text-midnight-100 mb-6 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0">
+          <p className="text-lg sm:text-xl md:text-2xl text-midnight-100 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0">
             希少な豆と、その物語をあなたに
             <br className="hidden sm:block" />
             <span className="text-gold-500">85点以上のコーヒーのみ</span>を厳選してお届け
           </p>
+          
+          {/* 初回50%OFF バッジ */}
+          <div className="mb-6 sm:mb-12">
+            <div className="inline-flex items-center bg-red-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-lg sm:text-xl md:text-2xl font-bold shadow-xl animate-pulse">
+              🎉 初回50%OFF
+            </div>
+          </div>
         </div>
 
         {/* CTA Buttons */}

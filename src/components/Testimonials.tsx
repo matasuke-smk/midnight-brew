@@ -95,7 +95,7 @@ const Testimonials: React.FC = () => {
 
         <div className="relative">
           {/* Main Testimonial */}
-          <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 max-w-4xl mx-auto">
+          <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 max-w-4xl mx-auto hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
             <div className="text-center mb-8">
               <Quote className="w-12 h-12 text-gold-500 mx-auto mb-4" />
               <div className="flex justify-center mb-4">

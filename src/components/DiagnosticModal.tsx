@@ -175,6 +175,19 @@ const DiagnosticModal: React.FC<DiagnosticModalProps> = ({ isOpen, onClose, onOp
                   </button>
                 ))}
               </div>
+              
+              {/* 戻るボタン */}
+              {currentStep > 0 && (
+                <div className="flex justify-center mt-6">
+                  <button
+                    onClick={() => setCurrentStep(currentStep - 1)}
+                    className="flex items-center space-x-2 px-6 py-3 border border-gray-600 text-midnight-100 rounded-lg hover:border-gold-500 hover:text-gold-500 transition-colors duration-200"
+                  >
+                    <span>←</span>
+                    <span>前の質問に戻る</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -214,13 +227,32 @@ const DiagnosticModal: React.FC<DiagnosticModalProps> = ({ isOpen, onClose, onOp
                     <h5 className="text-lg font-semibold text-midnight-50 mb-2">
                       今月のおすすめコーヒー
                     </h5>
-                    <div className="bg-midnight-800 rounded-lg p-4">
+                    <div className="bg-midnight-800 rounded-lg p-4 space-y-3">
                       <h6 className="font-semibold text-gold-500 mb-2">
                         {recommendation.bean}
                       </h6>
-                      <p className="text-midnight-100 text-sm">
+                      <p className="text-midnight-100 text-sm mb-3">
                         {recommendation.description}
                       </p>
+                      <div className="grid grid-cols-2 gap-3 text-xs text-midnight-100">
+                        <div>
+                          <span className="text-gold-500 font-medium">標高:</span> 1,950-2,100m
+                        </div>
+                        <div>
+                          <span className="text-gold-500 font-medium">精製:</span> Natural
+                        </div>
+                        <div>
+                          <span className="text-gold-500 font-medium">スコア:</span> 89点
+                        </div>
+                        <div>
+                          <span className="text-gold-500 font-medium">産地:</span> エチオピア
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <p className="text-xs text-midnight-100">
+                          🌆 あなたの味の好みにピッタリの一杯です
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

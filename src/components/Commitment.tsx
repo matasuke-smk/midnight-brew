@@ -49,7 +49,7 @@ const Commitment: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {commitments.map((commitment, index) => (
-            <div key={index} className="bg-midnight-900 rounded-2xl p-8 border border-gray-700 hover:border-gold-500/50 transition-all duration-300">
+            <div key={index} className="bg-midnight-900 rounded-2xl p-8 border border-gray-700 hover:border-gold-500/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   {commitment.icon}

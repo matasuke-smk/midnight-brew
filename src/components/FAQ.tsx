@@ -38,6 +38,16 @@ const FAQ: React.FC = () => {
     },
     {
       id: 6,
+      question: 'ギフト対応はしていますか？',
+      answer: '現在準備中です3ヶ月後にギフトオプションを追加予定です。美しいギフトボックスとメッセージカードをご用意いたします。'
+    },
+    {
+      id: 7,
+      question: 'コーヒー豆の保存方法は？',
+      answer: '直射日光を避け、密閉容器で冷暗所に保管してください。開封後は2週間以内にお飲みいただくことで、最高の風味をお楽しみいただけます。'
+    },
+    {
+      id: 6,
       question: 'ギフトとして利用できますか？',
       answer: 'はい、ギフト配送に対応しております。ギフトメッセージカード（無料）もご利用いただけます。ギフト専用ページからお申し込みください。'
     },
@@ -80,7 +90,7 @@ const FAQ: React.FC = () => {
 
         <div className="space-y-4">
           {faqItems.map((item) => (
-            <div key={item.id} className="bg-midnight-900 rounded-xl border border-gray-700 overflow-hidden">
+            <div key={item.id} className="bg-midnight-900 rounded-xl border border-gray-700 overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
               <button
                 onClick={() => toggleItem(item.id)}
                 className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-midnight-800/50 transition-colors duration-200"

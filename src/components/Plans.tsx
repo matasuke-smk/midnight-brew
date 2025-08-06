@@ -101,11 +101,21 @@ const Plans: React.FC<PlansProps> = ({ onOpenSignup }) => {
           <h2 className="text-4xl sm:text-5xl font-serif font-bold text-midnight-50 mb-6">
             あなたに合う<span className="text-gold-500">プラン</span>を選択
           </h2>
-          <p className="text-xl text-midnight-100 max-w-3xl mx-auto">
+          <p className="text-xl text-midnight-100 max-w-3xl mx-auto mb-4">
             ライフスタイルに合わせて、3つのプランをご用意しました。
             <br />
             すべてのプランで<span className="text-gold-500 font-semibold">初回50%OFF</span>
           </p>
+          <div className="flex items-center justify-center space-x-6 text-lg">
+            <div className="flex items-center space-x-2 text-green-500">
+              <span className="text-2xl">🚚</span>
+              <span className="font-semibold">全プラン送料無料</span>
+            </div>
+            <div className="flex items-center space-x-2 text-midnight-100">
+              <span className="text-2xl">🎁</span>
+              <span>いつでも解約可能</span>
+            </div>
+          </div>
         </div>
 
         {/* Plans Grid */}
@@ -113,7 +123,7 @@ const Plans: React.FC<PlansProps> = ({ onOpenSignup }) => {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative bg-midnight-900 rounded-2xl p-8 border-2 transition-all duration-300 hover:scale-105 ${
+              className={`relative bg-midnight-900 rounded-2xl p-8 border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 ${
                 plan.isPopular
                   ? 'border-gold-500 shadow-lg shadow-gold-500/20'
                   : 'border-gray-700 hover:border-gold-500/50'
@@ -122,7 +132,7 @@ const Plans: React.FC<PlansProps> = ({ onOpenSignup }) => {
               {/* Popular Badge */}
               {plan.isPopular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gold-500 text-midnight-900 px-4 py-2 rounded-full text-sm font-bold flex items-center space-x-1">
+                  <div className="bg-gold-500 text-midnight-900 px-4 py-2 rounded-full text-sm font-bold flex items-center space-x-1 animate-pulse shadow-lg shadow-gold-500/50">
                     <Star className="w-4 h-4" />
                     <span>人気No.1</span>
                   </div>
