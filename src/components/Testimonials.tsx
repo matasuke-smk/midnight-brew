@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { Star, ChevronRight, Quote } from 'lucide-react';
 
 interface Testimonial {
   id: number;
@@ -95,26 +95,6 @@ const Testimonials: React.FC = () => {
     });
   };
 
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => {
-      const newIndex = prev - 1;
-      // 最初のループの範囲内に入ったら、3番目のループの最後にジャンプ
-      if (newIndex < testimonials.length) {
-        if (containerRef.current) {
-          containerRef.current.style.transition = 'none';
-        }
-        setTimeout(() => {
-          setCurrentIndex(testimonials.length * 2 + newIndex);
-          if (containerRef.current) {
-            containerRef.current.style.transition = 'transform 500ms ease-in-out';
-          }
-        }, 10);
-        return newIndex;
-      }
-      return newIndex;
-    });
-  };
-
   // 自動スライド機能 (3秒ごと)
   useEffect(() => {
     if (!isHovered) {
@@ -137,13 +117,9 @@ const Testimonials: React.FC = () => {
     const endX = touch.clientX;
     const diff = startX - endX;
 
-    // 50px以上スワイプした場合
+    // 50px以上スワイプした場合は常に右方向に進む（循環）
     if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        nextTestimonial(); // 右スワイプ -> 次へ
-      } else {
-        prevTestimonial(); // 左スワイプ -> 前へ
-      }
+      nextTestimonial(); // どちらのスワイプでも右に進む
     }
   };
 
@@ -213,23 +189,16 @@ const Testimonials: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Buttons - スマホでは非表示 */}
-          <div className="hidden sm:flex justify-center space-x-4 mt-8">
-            <button
-              onClick={prevTestimonial}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className="bg-midnight-900 hover:bg-gold-500/10 border border-gray-700 hover:border-gold-500 rounded-full p-3 transition-all duration-200"
-            >
-              <ChevronLeft className="w-6 h-6 text-gold-500" />
-            </button>
+          {/* Navigation Buttons - 右方向循環のみ */}
+          <div className="hidden sm:flex justify-center mt-8">
             <button
               onClick={nextTestimonial}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-midnight-900 hover:bg-gold-500/10 border border-gray-700 hover:border-gold-500 rounded-full p-3 transition-all duration-200"
+              className="bg-midnight-900 hover:bg-gold-500/10 border border-gray-700 hover:border-gold-500 rounded-full p-3 transition-all duration-200 flex items-center space-x-2 px-4"
             >
-              <ChevronRight className="w-6 h-6 text-gold-500" />
+              <span className="text-midnight-50 text-sm">次のレビュー</span>
+              <ChevronRight className="w-5 h-5 text-gold-500" />
             </button>
           </div>
 
@@ -239,9 +208,16 @@ const Testimonials: React.FC = () => {
               <button
                 key={index}
                 onClick={() => {
-                  setCurrentIndex(index);
+                  // 直接ジャンプせず、右循環で目標のインデックスまで進む
+                  const currentMod = currentIndex % testimonials.length;
+                  let steps = (index - currentMod + testimonials.length) % testimonials.length;
+                  if (steps === 0 && index !== currentMod) steps = testimonials.length;
+                  
                   setIsHovered(true);
-                  setTimeout(() => setIsHovered(false), 1000); // 1秒間一時停止
+                  for (let i = 0; i < steps; i++) {
+                    setTimeout(() => nextTestimonial(), i * 200);
+                  }
+                  setTimeout(() => setIsHovered(false), steps * 200 + 500);
                 }}
                 className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
                   index === (currentIndex % testimonials.length) ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
@@ -253,7 +229,7 @@ const Testimonials: React.FC = () => {
           {/* スマホ用スワイプガイド */}
           <div className="sm:hidden text-center mt-4">
             <p className="text-midnight-100 text-sm">
-              ← スワイプで切り替え →
+              🔄 スワイプで循環 →
             </p>
           </div>
         </div>
