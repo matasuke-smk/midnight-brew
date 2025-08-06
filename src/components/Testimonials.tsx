@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 interface Testimonial {
@@ -12,6 +12,8 @@ interface Testimonial {
 
 const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const testimonials: Testimonial[] = [
     {
@@ -72,6 +74,38 @@ const Testimonials: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  // 自動スライド機能 (3秒ごと)
+  useEffect(() => {
+    if (!isHovered) {
+      const interval = setInterval(() => {
+        nextTestimonial();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isHovered]);
+
+  // タッチスライドのためのハンドラー
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touch = e.changedTouches[0];
+    const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
+    const endX = touch.clientX;
+    const diff = startX - endX;
+
+    // 50px以上スワイプした場合
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        nextTestimonial(); // 右スワイプ -> 次へ
+      } else {
+        prevTestimonial(); // 左スワイプ -> 前へ
+      }
+    }
+  };
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -94,59 +128,92 @@ const Testimonials: React.FC = () => {
         </div>
 
         <div className="relative">
-          {/* Main Testimonial */}
-          <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 max-w-4xl mx-auto hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
-            <div className="text-center mb-8">
-              <Quote className="w-12 h-12 text-gold-500 mx-auto mb-4" />
-              <div className="flex justify-center mb-4">
-                {renderStars(testimonials[currentIndex].rating)}
-              </div>
-            </div>
+          {/* Main Testimonial - スライド対応 */}
+          <div 
+            ref={containerRef}
+            className="overflow-hidden max-w-4xl mx-auto"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {testimonials.map((testimonial) => (
+                <div key={testimonial.id} className="w-full flex-shrink-0">
+                  <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
+                    <div className="text-center mb-8">
+                      <Quote className="w-12 h-12 text-gold-500 mx-auto mb-4" />
+                      <div className="flex justify-center mb-4">
+                        {renderStars(testimonial.rating)}
+                      </div>
+                    </div>
 
-            <blockquote className="text-lg md:text-xl text-midnight-50 leading-relaxed text-center mb-8">
-              "{testimonials[currentIndex].comment}"
-            </blockquote>
+                    <blockquote className="text-lg md:text-xl text-midnight-50 leading-relaxed text-center mb-8">
+                      "{testimonial.comment}"
+                    </blockquote>
 
-            <div className="text-center">
-              <div className="text-gold-500 font-semibold text-lg mb-1">
-                {testimonials[currentIndex].name}
-              </div>
-              <div className="text-midnight-100 text-sm mb-1">
-                {testimonials[currentIndex].plan} プラン
-              </div>
-              <div className="text-midnight-100 text-sm">
-                {testimonials[currentIndex].period}
-              </div>
+                    <div className="text-center">
+                      <div className="text-gold-500 font-semibold text-lg mb-1">
+                        {testimonial.name}
+                      </div>
+                      <div className="text-midnight-100 text-sm mb-1">
+                        {testimonial.plan} プラン
+                      </div>
+                      <div className="text-midnight-100 text-sm">
+                        {testimonial.period}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-center space-x-4 mt-8">
+          {/* Navigation Buttons - スマホでは非表示 */}
+          <div className="hidden sm:flex justify-center space-x-4 mt-8">
             <button
               onClick={prevTestimonial}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               className="bg-midnight-900 hover:bg-gold-500/10 border border-gray-700 hover:border-gold-500 rounded-full p-3 transition-all duration-200"
             >
               <ChevronLeft className="w-6 h-6 text-gold-500" />
             </button>
             <button
               onClick={nextTestimonial}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               className="bg-midnight-900 hover:bg-gold-500/10 border border-gray-700 hover:border-gold-500 rounded-full p-3 transition-all duration-200"
             >
               <ChevronRight className="w-6 h-6 text-gold-500" />
             </button>
           </div>
 
-          {/* Indicators */}
-          <div className="flex justify-center space-x-2 mt-6">
+          {/* Indicators - スマホでは大きめに表示 */}
+          <div className="flex justify-center space-x-2 sm:space-x-2 mt-6">
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                  index === currentIndex ? 'bg-gold-500' : 'bg-gray-600 hover:bg-gray-500'
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setIsHovered(true);
+                  setTimeout(() => setIsHovered(false), 1000); // 1秒間一時停止
+                }}
+                className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
+                  index === currentIndex ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
                 }`}
               />
             ))}
+          </div>
+          
+          {/* スマホ用スワイプガイド */}
+          <div className="sm:hidden text-center mt-4">
+            <p className="text-midnight-100 text-sm">
+              ← スワイプで切り替え →
+            </p>
           </div>
         </div>
 
