@@ -66,26 +66,30 @@ const Testimonials: React.FC = () => {
     }
   ];
 
-  // シームレスなループのため、最初のアイテムを最後に追加
-  const extendedTestimonials = [...testimonials, testimonials[0]];
+  // 真の無限スクロールのため、testimonials配列を3回繰り返す
+  const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
+
+  // 初期化時に2回目のループの最初に設定
+  useEffect(() => {
+    setCurrentIndex(testimonials.length);
+  }, []);
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => {
       const next = prev + 1;
-      // 最後のコピーされたアイテムに達したら、シームレスに最初に戻る
-      if (next >= testimonials.length) {
+      // 2回目のループ（testimonials.length * 2）に達したら、瞬間的に最初のループに戻る
+      if (next >= testimonials.length * 2) {
+        // トランジションを無効にして瞬間移動
+        if (containerRef.current) {
+          containerRef.current.style.transition = 'none';
+        }
         setTimeout(() => {
+          setCurrentIndex(testimonials.length); // 2回目のループの最初に移動
           if (containerRef.current) {
-            containerRef.current.style.transition = 'none';
-            setCurrentIndex(0);
-            requestAnimationFrame(() => {
-              if (containerRef.current) {
-                containerRef.current.style.transition = 'transform 500ms ease-in-out';
-              }
-            });
+            containerRef.current.style.transition = 'transform 500ms ease-in-out';
           }
-        }, 500);
-        return next; // 一旦最後のコピーを表示
+        }, 10);
+        return next;
       }
       return next;
     });
@@ -93,11 +97,21 @@ const Testimonials: React.FC = () => {
 
   const prevTestimonial = () => {
     setCurrentIndex((prev) => {
-      if (prev === 0) {
-        // 最初から最後へ
-        return testimonials.length - 1;
+      const newIndex = prev - 1;
+      // 最初のループの範囲内に入ったら、3番目のループの最後にジャンプ
+      if (newIndex < testimonials.length) {
+        if (containerRef.current) {
+          containerRef.current.style.transition = 'none';
+        }
+        setTimeout(() => {
+          setCurrentIndex(testimonials.length * 2 + newIndex);
+          if (containerRef.current) {
+            containerRef.current.style.transition = 'transform 500ms ease-in-out';
+          }
+        }, 10);
+        return newIndex;
       }
-      return prev - 1;
+      return newIndex;
     });
   };
 
@@ -168,7 +182,7 @@ const Testimonials: React.FC = () => {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {extendedTestimonials.map((testimonial, index) => (
+              {infiniteTestimonials.map((testimonial, index) => (
                 <div key={`${testimonial.id}-${index}`} className="w-full flex-shrink-0">
                   <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
                     <div className="text-center mb-8">
@@ -230,7 +244,7 @@ const Testimonials: React.FC = () => {
                   setTimeout(() => setIsHovered(false), 1000); // 1秒間一時停止
                 }}
                 className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
-                  index === (currentIndex >= testimonials.length ? 0 : currentIndex) ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
+                  index === (currentIndex % testimonials.length) ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
                 }`}
               />
             ))}
