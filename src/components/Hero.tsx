@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/image/top-coffee_beans.jpeg')`
+            backgroundImage: `url('./image/top-coffee_beans.jpeg')`
           }}
         />
         {/* Dark overlay for text readability */}
