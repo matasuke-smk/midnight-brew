@@ -66,12 +66,39 @@ const Testimonials: React.FC = () => {
     }
   ];
 
+  // シームレスなループのため、最初のアイテムを最後に追加
+  const extendedTestimonials = [...testimonials, testimonials[0]];
+
   const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    setCurrentIndex((prev) => {
+      const next = prev + 1;
+      // 最後のコピーされたアイテムに達したら、シームレスに最初に戻る
+      if (next >= testimonials.length) {
+        setTimeout(() => {
+          if (containerRef.current) {
+            containerRef.current.style.transition = 'none';
+            setCurrentIndex(0);
+            requestAnimationFrame(() => {
+              if (containerRef.current) {
+                containerRef.current.style.transition = 'transform 500ms ease-in-out';
+              }
+            });
+          }
+        }, 500);
+        return next; // 一旦最後のコピーを表示
+      }
+      return next;
+    });
   };
 
   const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex((prev) => {
+      if (prev === 0) {
+        // 最初から最後へ
+        return testimonials.length - 1;
+      }
+      return prev - 1;
+    });
   };
 
   // 自動スライド機能 (3秒ごと)
@@ -141,8 +168,8 @@ const Testimonials: React.FC = () => {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {testimonials.map((testimonial) => (
-                <div key={testimonial.id} className="w-full flex-shrink-0">
+              {extendedTestimonials.map((testimonial, index) => (
+                <div key={`${testimonial.id}-${index}`} className="w-full flex-shrink-0">
                   <div className="bg-midnight-900 rounded-2xl p-8 md:p-12 border border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold-500/30 transition-all duration-300">
                     <div className="text-center mb-8">
                       <Quote className="w-12 h-12 text-gold-500 mx-auto mb-4" />
@@ -203,7 +230,7 @@ const Testimonials: React.FC = () => {
                   setTimeout(() => setIsHovered(false), 1000); // 1秒間一時停止
                 }}
                 className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
-                  index === currentIndex ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
+                  index === (currentIndex >= testimonials.length ? 0 : currentIndex) ? 'bg-gold-500 scale-110' : 'bg-gray-600 hover:bg-gray-500'
                 }`}
               />
             ))}
