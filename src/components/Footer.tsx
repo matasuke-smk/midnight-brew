@@ -4,10 +4,10 @@ import { Coffee, Mail, Phone, Instagram, Twitter, Facebook } from 'lucide-react'
 const Footer: React.FC = () => {
   return (
     <footer className="bg-midnight-900 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
-          <div className="md:col-span-1">
+          <div className="sm:col-span-2 md:col-span-1">
             <button 
               onClick={() => {
                 window.scrollTo({
@@ -189,9 +189,9 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="sm:col-span-2 md:col-span-1">
             <h4 className="text-midnight-50 font-semibold mb-4">お問い合わせ</h4>
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-gold-500" />
                 <span className="text-midnight-100 text-sm">
@@ -204,17 +204,17 @@ const Footer: React.FC = () => {
                   0120-123-456
                 </span>
               </div>
-              <div className="text-midnight-100 text-sm">
-                営業時間: 平日 9:00-18:00
+              <div className="text-midnight-100 text-xs sm:text-sm">
+                平日 9:00-18:00
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm text-midnight-100">
+        <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-xs sm:text-sm text-midnight-100">
               <button 
                 onClick={() => alert('特定商取引法に基づく表記\n\n販売業者：株式会社Midnight Brew\n代表者：代表取締役 山田太郎\n所在地：〒150-0001 東京都渋谷区神宮前1-1-1\n電話番号：0120-123-456\n支払方法：クレジットカード\n商品代金以外の料金：送料無料\n引渡し時期：注文確定後3-5営業日以内\n返品・交換：商品に問題がある場合のみ7日以内')}
                 className="hover:text-gold-500 transition-colors text-left"
