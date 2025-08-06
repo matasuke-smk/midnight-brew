@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ArrowLeft, ArrowRight, Coffee, CheckCircle } from 'lucide-react';
+import { X, Coffee, CheckCircle } from 'lucide-react';
 
 interface DiagnosticModalProps {
   isOpen: boolean;
