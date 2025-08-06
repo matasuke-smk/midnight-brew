@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-16 sm:pb-20">
+    <section className="relative min-h-[120vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Coffee Bean Background */}
       <div className="absolute inset-0">
         <div 
@@ -36,7 +36,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 sm:pt-0">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-24 sm:pt-0 sm:pb-0">
         <div className="mb-8">
           <div className="inline-flex items-center space-x-2 bg-gold-500/10 border border-gold-500/20 rounded-full px-3 py-2 mb-6 sm:mb-8">
             <Sparkles className="w-4 h-4 text-gold-500" />
@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto mb-16 sm:mb-20 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto mb-24 sm:mb-20 px-4 sm:px-0">
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-gold-500 mb-2">85+</div>
             <div className="text-midnight-100 text-sm sm:text-base">カッピングスコア</div>
@@ -92,9 +92,9 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="bg-black/30 rounded-full p-2 backdrop-blur-sm">
-          <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-gold-500" />
+      <div className="absolute bottom-8 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="bg-black/50 rounded-full p-3 backdrop-blur-sm border border-gold-500/20">
+          <ChevronDown className="w-6 h-6 text-gold-500" />
         </div>
       </div>
 
